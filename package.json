@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "SET NODE_ENV=test&&nodemon app.js",
-    "dev": "SET NODE_ENV=development&&nodemon app.js"
+    "dev": "SET NODE_ENV=development&&nodemon app.js",
+    "start": "SET NODE_ENV=development&&nodemon app.js"
   },
   "author": "Yoko",
   "license": "ISC",
