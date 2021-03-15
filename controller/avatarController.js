@@ -63,7 +63,7 @@ class AvatarController {
       const rawData = fs.readFileSync(files.Avatar.path);
       const path = "assets/avatar";
       if (!fs.existsSync(`${defaultPath}/${path}`))
-        await fs.mkdirpsync(`${defaultPath}/${path}`);
+        await fs.mkdirSync(`${defaultPath}/${path}`);
       const avatarPath = `${defaultPath}/${path}/avatar_${UserExist._id}.${imgType}`;
       await fs.writeFileSync(avatarPath, rawData);
       const AvatarDB = await Avatar.create({
