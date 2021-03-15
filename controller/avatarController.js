@@ -14,16 +14,12 @@ class AvatarController {
         .exec();
       if (
         !fs.existsSync(
-          `${__dirname}/assets/avatar/${UserExist.Avatar.Avatar}.${
-            UserExist.Avatar.AvatarType
-          }`
+          `${__dirname}/assets/avatar/${UserExist.Avatar.Avatar}.${UserExist.Avatar.AvatarType}`
         )
       )
         throw new Error("did not exist");
       const Stream = await fs.createReadStream(
-        `${__dirname}/assets/avatar/${UserExist.Avatar.Avatar}.${
-          UserExist.Avatar.AvatarType
-        }`
+        `${__dirname}/assets/avatar/${UserExist.Avatar.Avatar}.${UserExist.Avatar.AvatarType}`
       );
       // console.log(Stream)
       Stream.on("open", async () => {
@@ -66,7 +62,8 @@ class AvatarController {
       const rawData = fs.readFileSync(files.Avatar.path);
       const path = "assets/avatar";
       if (!fs.existsSync(path)) await fs.mkdirSync(path);
-      const avatarPath = `${path}/avatar_${UserExist._id}.${imgType}`;
+      const avatarPath = `${__dirname}/${path}/avatar_${UserExist._id}.${imgType}`;
+      console.log(avatarPath)
       await fs.writeFileSync(avatarPath, rawData);
       const AvatarDB = await Avatar.create({
         Avatar: `avatar_${UserExist._id}`,
@@ -108,6 +105,7 @@ class AvatarController {
       await avatarDB.save();
       if (!fs.existsSync(path)) await fs.mkdirSync(path);
       const avatarPath = `${path}/avatar_${UserExist._id}.${imgType}`;
+      console.log(avatarpath);
       await fs.writeFileSync(avatarPath, rawData);
       return res.status(200).json({
         msg: "Update Avatar Success",
