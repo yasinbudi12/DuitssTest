@@ -2,6 +2,7 @@ const fs = require("fs-extra");
 const { User, Avatar } = require("../schema/index");
 const jwt = require("jsonwebtoken");
 const imageType = require("../middleware/imagetype");
+const defaultPath = require("../path");
 
 // const minio = require("../middleware/minio");
 class AvatarController {
@@ -14,12 +15,12 @@ class AvatarController {
         .exec();
       if (
         !fs.existsSync(
-          `${__dirname}/assets/avatar/${UserExist.Avatar.Avatar}.${UserExist.Avatar.AvatarType}`
+          `${defaultPath}/assets/avatar/${UserExist.Avatar.Avatar}.${UserExist.Avatar.AvatarType}`
         )
       )
         throw new Error("did not exist");
       const Stream = await fs.createReadStream(
-        `${__dirname}/assets/avatar/${UserExist.Avatar.Avatar}.${UserExist.Avatar.AvatarType}`
+        `${defaultPath}/assets/avatar/${UserExist.Avatar.Avatar}.${UserExist.Avatar.AvatarType}`
       );
       // console.log(Stream)
       Stream.on("open", async () => {
@@ -37,7 +38,7 @@ class AvatarController {
     } catch (error) {
       // if (!IsExist) await minio.makeBucket("avatar");
       const StreamDefault = fs.createReadStream(
-        `${__dirname}/assets/AvatarPlaceholder.gif`
+        `${defaultPath}/assets/AvatarPlaceholder.gif`
       );
       const ImageTypeDefault = "image/gif";
       res.setHeader("Content-Type", ImageTypeDefault);
@@ -61,8 +62,9 @@ class AvatarController {
       let imgType = imageType(files.Avatar.type);
       const rawData = fs.readFileSync(files.Avatar.path);
       const path = "assets/avatar";
-      if (!fs.existsSync(`${__dirname}/${path}`)) await fs.mkdirSync(`${__dirname}/${path}`);
-      const avatarPath = `${__dirname}/${path}/avatar_${UserExist._id}.${imgType}`;
+      if (!fs.existsSync(`${defaultPath}/${path}`))
+        await fs.mkdirpsync(`${defaultPath}/${path}`);
+      const avatarPath = `${defaultPath}/${path}/avatar_${UserExist._id}.${imgType}`;
       await fs.writeFileSync(avatarPath, rawData);
       const AvatarDB = await Avatar.create({
         Avatar: `avatar_${UserExist._id}`,
@@ -95,15 +97,18 @@ class AvatarController {
       const rawData = fs.readFileSync(files.Avatar.path);
       const avatarDB = await Avatar.findOne(UserExist.Avatar._id);
       if (
-        fs.existsSync(`${__dirname}/${path}/avatar_${UserExist._id}.${avatarDB.AvatarType}`)
+        fs.existsSync(
+          `${defaultPath}/${path}/avatar_${UserExist._id}.${avatarDB.AvatarType}`
+        )
       )
         await fs.unlink(
-          `${__dirname}/${path}/avatar_${UserExist._id}.${avatarDB.AvatarType}`
+          `${defaultPath}/${path}/avatar_${UserExist._id}.${avatarDB.AvatarType}`
         );
       avatarDB.AvatarType = imgType;
       await avatarDB.save();
-      if (!fs.existsSync(`${__dirname}/${path}`)) await fs.mkdirSync(`${__dirname}/${path}`);
-      const avatarPath = `${__dirname}/${path}/avatar_${UserExist._id}.${imgType}`;
+      if (!fs.existsSync(`${defaultPath}/${path}`))
+        await fs.mkdirSync(`${defaultPath}/${path}`);
+      const avatarPath = `${defaultPath}/${path}/avatar_${UserExist._id}.${imgType}`;
       console.log(avatarpath);
       await fs.writeFileSync(avatarPath, rawData);
       return res.status(200).json({
