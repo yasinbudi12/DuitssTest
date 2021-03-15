@@ -61,9 +61,8 @@ class AvatarController {
       let imgType = imageType(files.Avatar.type);
       const rawData = fs.readFileSync(files.Avatar.path);
       const path = "assets/avatar";
-      if (!fs.existsSync(path)) await fs.mkdirSync(path);
+      if (!fs.existsSync(`${__dirname}/${path}`)) await fs.mkdirSync(`${__dirname}/${path}`);
       const avatarPath = `${__dirname}/${path}/avatar_${UserExist._id}.${imgType}`;
-      console.log(avatarPath)
       await fs.writeFileSync(avatarPath, rawData);
       const AvatarDB = await Avatar.create({
         Avatar: `avatar_${UserExist._id}`,
@@ -96,15 +95,15 @@ class AvatarController {
       const rawData = fs.readFileSync(files.Avatar.path);
       const avatarDB = await Avatar.findOne(UserExist.Avatar._id);
       if (
-        fs.existsSync(`${path}/avatar_${UserExist._id}.${avatarDB.AvatarType}`)
+        fs.existsSync(`${__dirname}/${path}/avatar_${UserExist._id}.${avatarDB.AvatarType}`)
       )
         await fs.unlink(
-          `${path}/avatar_${UserExist._id}.${avatarDB.AvatarType}`
+          `${__dirname}/${path}/avatar_${UserExist._id}.${avatarDB.AvatarType}`
         );
       avatarDB.AvatarType = imgType;
       await avatarDB.save();
-      if (!fs.existsSync(path)) await fs.mkdirSync(path);
-      const avatarPath = `${path}/avatar_${UserExist._id}.${imgType}`;
+      if (!fs.existsSync(`${__dirname}/${path}`)) await fs.mkdirSync(`${__dirname}/${path}`);
+      const avatarPath = `${__dirname}/${path}/avatar_${UserExist._id}.${imgType}`;
       console.log(avatarpath);
       await fs.writeFileSync(avatarPath, rawData);
       return res.status(200).json({
