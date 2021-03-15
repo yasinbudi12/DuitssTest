@@ -14,14 +14,14 @@ class AvatarController {
         .exec();
       if (
         !fs.existsSync(
-          `${process.cwd()}/assets/avatar/${UserExist.Avatar.Avatar}.${
+          `${__dirname}/assets/avatar/${UserExist.Avatar.Avatar}.${
             UserExist.Avatar.AvatarType
           }`
         )
       )
         throw new Error("did not exist");
       const Stream = await fs.createReadStream(
-        `${process.cwd()}/assets/avatar/${UserExist.Avatar.Avatar}.${
+        `${__dirname}/assets/avatar/${UserExist.Avatar.Avatar}.${
           UserExist.Avatar.AvatarType
         }`
       );
@@ -41,7 +41,7 @@ class AvatarController {
     } catch (error) {
       // if (!IsExist) await minio.makeBucket("avatar");
       const StreamDefault = fs.createReadStream(
-        `${process.cwd()}/assets/AvatarPlaceholder.gif`
+        `${__dirname}/assets/AvatarPlaceholder.gif`
       );
       const ImageTypeDefault = "image/gif";
       res.setHeader("Content-Type", ImageTypeDefault);
