@@ -67,7 +67,7 @@ class AvatarController {
       const path = "assets/avatar";
       if (!fs.existsSync(path)) await fs.mkdirSync(path);
       const avatarPath = `${path}/avatar_${UserExist._id}.${imgType}`;
-      await fs.writeFile(avatarPath, rawData);
+      await fs.writeFileSync(avatarPath, rawData);
       const AvatarDB = await Avatar.create({
         Avatar: `avatar_${UserExist._id}`,
         AvatarType: imgType,
@@ -108,7 +108,7 @@ class AvatarController {
       await avatarDB.save();
       if (!fs.existsSync(path)) await fs.mkdirSync(path);
       const avatarPath = `${path}/avatar_${UserExist._id}.${imgType}`;
-      await fs.writeFile(avatarPath, rawData);
+      await fs.writeFileSync(avatarPath, rawData);
       return res.status(200).json({
         msg: "Update Avatar Success",
       });
