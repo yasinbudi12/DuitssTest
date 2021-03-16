@@ -79,6 +79,28 @@ class UserController {
       });
     }
   }
+  static async CheckPhone(req, res) {
+    try {
+      const PhoneNumber = req.params.phone;
+      const isExist = await User.findOne({ PhoneNumber: PhoneNumber });
+      if (isExist) {
+        return res.status(200).json({
+          msg: "Check Number Success",
+          data: true,
+        });
+      } else {
+        return res.status(200).json({
+          msg: "Check Number Success",
+          data: false,
+        });
+      }
+    } catch (error) {
+      return res.status(400).json({
+        msg: "Check Number Failed",
+        err: error.message,
+      });
+    }
+  }
 }
 
 module.exports = UserController;
